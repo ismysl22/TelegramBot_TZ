@@ -87,16 +87,6 @@ def all_message(client: Client, message: Message):
             logger.info("Скоро вернусь(info)")
 
 
-        # flag=False
-        # for message in client.get_chat_history(id_ch, limit=30):
-        #     if message.text == "Хорошего дня":
-        #         flag=True
-        # if flag==False:
-        #     #отправка сообщения "Скоро вернусь с новым материалом!" через 2ч
-        #     time.sleep(7200)
-        #     client.send_message(id_ch, 'Скоро вернусь с новым материалом!')
-        #     logger.info("Скоро вернусь(info)")
-
 #регистрация хендлеров
 client.add_handler(MessageHandler(command_start, filters.command('users_today')))
 client.add_handler(MessageHandler(all_message, filters=(~filters.outgoing & ~filters.chat(chats='me'))))
