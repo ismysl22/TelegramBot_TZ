@@ -17,8 +17,6 @@ from alchemy_base import User, Base
 load_dotenv()
 API_ID = os.getenv("api_id")
 API_HASH = os.getenv("api_hash")
-# api_id = 27045678
-# api_hash = 'ce72c2c8198d70f546951aed037337ca'
 
 
 client = Client(name='me_client', api_id=API_ID, api_hash=API_HASH)
