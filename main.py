@@ -1,24 +1,27 @@
 #Импорт библиотек
+import os
 import time
-import mysql.connector
 from pyrogram import Client, idle
 from pyrogram.handlers import MessageHandler
 from pyrogram.types import Message
-from pyrogram.enums import ChatAction
 from pyrogram import filters
 from loguru import logger
 from datetime import date
+from dotenv import load_dotenv
 
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import relationship, sessionmaker
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from alchemy_base import User, Base
 
+load_dotenv()
+API_ID = os.getenv("api_id")
+API_HASH = os.getenv("api_hash")
+# api_id = 27045678
+# api_hash = 'ce72c2c8198d70f546951aed037337ca'
 
-api_id = 27045678
-api_hash = 'ce72c2c8198d70f546951aed037337ca'
 
-
-client = Client(name='me_client', api_id=api_id, api_hash=api_hash)
+client = Client(name='me_client', api_id=API_ID, api_hash=API_HASH)
 
 engine = create_engine("mysql+mysqlconnector://root:root@127.0.0.1:3306/time_bot", echo=True)
 
@@ -77,22 +80,22 @@ def all_message(client: Client, message: Message):
         client.send_photo(id_ch, 'https://w.forfun.com/fetch/f1/f1ea8ae2e3a05e675f937fc177626474.jpeg')
         logger.info("Отправил фото(info)")
 
-
-        # if client.search_messages_count(id_ch, "Хорошего дня", from_user="me")==0:
-        #     time.sleep(10)
-        #     client.send_message(id_ch, 'Скоро вернусь с новым материалом!')
-        #     logger.info("Скоро вернусь(info)")
-
-        #проверка на наличие в чате сообщения "Хорошего дня"
-        flag=False
-        for message in client.get_chat_history(id_ch, limit=30):
-            if message.text == "Хорошего дня":
-                flag=True
-        if flag==False:
-            #отправка сообщения "Скоро вернусь с новым материалом!" через 2ч
+        # проверка на наличие в чате сообщения "Хорошего дня"
+        if client.search_messages_count(id_ch, "Хорошего дня", from_user=message.from_user.id)==0:
             time.sleep(7200)
             client.send_message(id_ch, 'Скоро вернусь с новым материалом!')
             logger.info("Скоро вернусь(info)")
+
+
+        # flag=False
+        # for message in client.get_chat_history(id_ch, limit=30):
+        #     if message.text == "Хорошего дня":
+        #         flag=True
+        # if flag==False:
+        #     #отправка сообщения "Скоро вернусь с новым материалом!" через 2ч
+        #     time.sleep(7200)
+        #     client.send_message(id_ch, 'Скоро вернусь с новым материалом!')
+        #     logger.info("Скоро вернусь(info)")
 
 #регистрация хендлеров
 client.add_handler(MessageHandler(command_start, filters.command('users_today')))

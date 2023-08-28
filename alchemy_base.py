@@ -2,8 +2,13 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+
+from pathlib import Path
+
 # подключение к бд
-engine = create_engine("mysql+mysqlconnector://root:root@127.0.0.1:3306/time_bot", echo=True)
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+DB_NAME = BASE_DIR / "users.db"
+engine = create_engine(f"sqlite:///{str(DB_NAME)}")
 
 Base = declarative_base()
 
